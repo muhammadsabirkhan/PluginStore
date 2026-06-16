@@ -109,4 +109,9 @@ class ProductController extends Controller
 
         return back()->with('success', 'Product deleted successfully.');
     }
+    public function deals() {
+    // Sirf wo products fetch hongi jinki discount price set ki gayi hai
+    $products = Product::whereNotNull('discount_price')->latest()->get(); 
+    return view('frontend.shop', compact('products')); // Ya jo bhi view ka naam ho
+}
 }

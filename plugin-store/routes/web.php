@@ -19,6 +19,7 @@ use App\Http\Middleware\AdminMiddleware;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{slug}', [HomeController::class, 'show'])->name('product.show');
 Route::get('/ajax-search', [HomeController::class, 'ajaxSearch'])->name('ajax.search');
+Route::post('/apply-coupon', [App\Http\Controllers\CartController::class, 'applyCoupon'])->name('cart.coupon');
 
     // Shop, Filters & Navigation Routes
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
@@ -38,6 +39,8 @@ Route::post('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->nam
 // Checkout Routes
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
 // Guest Routes (Login/Register)
 Route::middleware('guest')->group(function () {
@@ -63,6 +66,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 // Categories
     Route::resource('categories', CategoryController::class);
     Route::patch('/categories/{id}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggleStatus');
+    Route::resource('coupons', App\Http\Controllers\Admin\CouponController::class)->only(['index', 'store', 'destroy']);
     
     // Products
     Route::resource('products', ProductController::class);

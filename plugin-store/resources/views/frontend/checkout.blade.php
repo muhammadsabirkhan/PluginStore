@@ -34,6 +34,13 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 py-12">
+        
+        @if(session('error'))
+            <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg font-medium shadow-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="flex flex-col lg:flex-row gap-8">
             
             <div class="w-full lg:w-2/3">
@@ -73,18 +80,22 @@
 
                     <h3 class="text-lg font-bold text-gray-900 mb-4">Payment Method</h3>
                     <div class="space-y-3 mb-8">
+                        
                         <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                             <input type="radio" name="payment_method" value="cod" checked class="w-4 h-4 text-blue-600 focus:ring-blue-500">
                             <span class="ml-3 font-medium text-gray-900">Cash on Delivery (COD)</span>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                            <input type="radio" name="payment_method" value="jazzcash" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-3 font-medium text-gray-900">JazzCash Auto</span>
+                        
+                        <label class="flex items-center p-4 border border-blue-100 bg-blue-50/30 rounded-lg cursor-pointer hover:bg-blue-50 transition">
+                            <input type="radio" name="payment_method" value="stripe" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                            <div class="ml-3 flex-1 flex justify-between items-center">
+                                <span class="font-medium text-gray-900">Pay with Credit/Debit Card</span>
+                                <div class="flex gap-1">
+                                    <svg class="w-8 h-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                                </div>
+                            </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                            <input type="radio" name="payment_method" value="easypaisa" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-3 font-medium text-gray-900">EasyPaisa</span>
-                        </label>
+
                     </div>
 
                     <button type="submit" class="w-full bg-gray-900 text-white font-bold py-4 rounded-xl hover:bg-gray-800 transition shadow-lg transform hover:-translate-y-0.5">

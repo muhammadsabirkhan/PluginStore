@@ -106,17 +106,21 @@
                     </div>
 
                     @if(!session()->has('coupon'))
-                    <form action="{{ route('cart.apply_coupon') }}" method="POST" class="flex gap-2 mb-6 border-t border-gray-100 pt-6">
+                    <form action="{{ route('cart.coupon') }}" method="POST" class="mt-4 flex gap-2">
                         @csrf
-                        <input type="text" name="coupon_code" placeholder="Enter Promo Code" required class="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none uppercase">
-                        <button type="submit" class="bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-800 transition font-semibold">Apply</button>
+                        <input type="text" name="code" placeholder="ENTER PROMO CODE" required class="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase font-medium">
+                        
+                        <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition shadow-sm">
+                            Apply
+                        </button>
                     </form>
                     @endif
 
-                    <a href="{{ route('checkout.index') }}" class="w-full block text-center bg-blue-600 text-white font-bold py-3.5 rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">
-                        Proceed to Checkout &rarr;
-                    </a>
-                </div>
+                    <div class="mt-6">
+                        <a href="{{ route('checkout.index') }}" class="w-full block text-center bg-blue-600 text-white font-bold py-3.5 rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">
+                            Proceed to Checkout &rarr;
+                        </a>
+                    </div>
             </div>
         </div>
         @else

@@ -81,23 +81,31 @@ class CartController extends Controller
     }
 
     // New: Apply Coupon
-    public function applyCoupon(Request $request)
-    {
-        $request->validate(['coupon_code' => 'required|string']);
-        
-        $coupon = Coupon::where('code', strtoupper($request->coupon_code))->where('is_active', true)->first();
+       public function applyCoupon(\Illuminate\Http\Request $request)
+               {
+        // 1. Pehle check karein ke input mein kuch aaya bhi hai ya nahi
+        $request->validate([
+            'code' => 'required|string'
+        ]);
 
-        if (!$coupon) {
-            return redirect()->back()->with('error', 'Invalid or expired promo code.');
+        // 2. Database mein search karein (strtoupper se small/capital letters ka masla khatam ho jayega)
+        $coupon = \App\Models\Coupon::where('code', strtoupper($request->code))
+                                    ->where('is_active', true)
+                                    ->first();
+        
+        // 3. Agar coupon na mile toh error return karein
+        if(!$coupon) {
+            return back()->with('error', 'Invalid or expired coupon code!');
         }
 
+        // 4. Agar mil jaye toh session mein save kar lein
         session()->put('coupon', [
             'code' => $coupon->code,
             'type' => $coupon->type,
-            'value' => $coupon->value,
+            'value' => $coupon->value
         ]);
 
-        return redirect()->back()->with('success', 'Coupon applied successfully!');
+        return back()->with('success', 'Coupon applied successfully!');
     }
 
     // New: Remove Coupon
