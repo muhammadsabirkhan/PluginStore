@@ -9,13 +9,10 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Show Login Page
     public function showLogin()
     {
         return view('auth.login');
     }
-
-    // Process Login
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -25,8 +22,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
-            // Redirect based on role
+    
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended('/admin/dashboard');
             }
@@ -38,13 +34,11 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // Show Registration Page
     public function showRegister()
     {
         return view('auth.register');
     }
 
-    // Process Registration
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -59,15 +53,13 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => Hash::make($validated['password']),
-            'role' => 'customer', // Default role
+            'role' => 'customer',
         ]);
 
         Auth::login($user);
 
         return redirect('/');
     }
-
-    // Process Logout
     public function logout(Request $request)
     {
         Auth::logout();

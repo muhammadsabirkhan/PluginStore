@@ -136,7 +136,6 @@
     </main>
 
     <script>
-        // Update Cart via AJAX
         $(".update-cart").change(function (e) {
             e.preventDefault();
             var ele = $(this);
@@ -154,7 +153,6 @@
             });
         });
 
-        // Remove from Cart via AJAX
         $(".remove-from-cart").click(function (e) {
             e.preventDefault();
             var ele = $(this);

@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null'); // Agar user logged in hai
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('full_name');
             $table->string('email');
             $table->string('phone');
             $table->text('shipping_address');
             $table->string('city');
             $table->decimal('total_amount', 10, 2);
-            $table->string('payment_method')->default('cod'); // cod, jazzcash, easypaisa
+            $table->string('payment_method')->default('cod');
             $table->string('payment_status')->default('pending');
-            $table->string('order_status')->default('pending'); // pending, processing, shipped, delivered
+            $table->string('order_status')->default('pending');
             $table->timestamps();
         });
     }

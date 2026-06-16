@@ -15,7 +15,7 @@ class ReviewController extends Controller
             'comment' => 'required|string|max:1000',
         ]);
 
-        // Check if user already reviewed this product
+    
         $existingReview = Review::where('user_id', Auth::id())->where('product_id', $productId)->first();
 
         if ($existingReview) {

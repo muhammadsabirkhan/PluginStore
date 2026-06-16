@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('slug')->unique(); // SEO friendly URLs ke liye
-            $table->string('icon')->nullable(); // UI mein show karne ke liye
+            $table->string('slug')->unique();
+            $table->string('icon')->nullable(); 
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

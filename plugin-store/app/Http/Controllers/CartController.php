@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Coupon; // <-- Yeh add karein
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -17,7 +17,6 @@ class CartController extends Controller
             $subtotal += $item['price'] * $item['quantity'];
         }
 
-        // Coupon calculation
         $discount = 0;
         if (session()->has('coupon')) {
             $coupon = session('coupon');
@@ -72,33 +71,25 @@ class CartController extends Controller
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
             }
-            // Agar cart khali ho jaye toh coupon bhi remove kar dein
             if(empty($cart)) {
                 session()->forget('coupon');
             }
             session()->flash('success', 'Product removed successfully');
         }
     }
-
-    // New: Apply Coupon
        public function applyCoupon(\Illuminate\Http\Request $request)
                {
-        // 1. Pehle check karein ke input mein kuch aaya bhi hai ya nahi
         $request->validate([
             'code' => 'required|string'
         ]);
-
-        // 2. Database mein search karein (strtoupper se small/capital letters ka masla khatam ho jayega)
         $coupon = \App\Models\Coupon::where('code', strtoupper($request->code))
                                     ->where('is_active', true)
                                     ->first();
-        
-        // 3. Agar coupon na mile toh error return karein
+    
         if(!$coupon) {
             return back()->with('error', 'Invalid or expired coupon code!');
         }
 
-        // 4. Agar mil jaye toh session mein save kar lein
         session()->put('coupon', [
             'code' => $coupon->code,
             'type' => $coupon->type,
@@ -108,7 +99,6 @@ class CartController extends Controller
         return back()->with('success', 'Coupon applied successfully!');
     }
 
-    // New: Remove Coupon
     public function removeCoupon()
     {
         session()->forget('coupon');

@@ -10,9 +10,9 @@ public function up()
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique(); // e.g., PLUGIN20
+            $table->string('code')->unique();
             $table->enum('type', ['percent', 'fixed'])->default('percent');
-            $table->integer('value'); // e.g., 20 (for 20%) ya 500 (for Rs.500)
+            $table->integer('value'); 
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

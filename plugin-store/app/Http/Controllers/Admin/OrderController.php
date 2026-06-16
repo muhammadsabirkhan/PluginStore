@@ -13,8 +13,6 @@ class OrderController extends Controller
         $orders = Order::latest()->get();
         return view('admin.orders.index', compact('orders'));
     }
-
-    // New: Update Order Status
     public function updateStatus(Request $request, $id)
     {
         $request->validate(['order_status' => 'required|in:pending,processing,shipped,delivered']);

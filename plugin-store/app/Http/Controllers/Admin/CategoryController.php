@@ -21,7 +21,6 @@ class CategoryController extends Controller
         return back()->with('success', 'Category deleted successfully.');
     }
 
-    // Naya method Status Toggle ke liye
     public function toggleStatus($id)
     {
         $category = Category::findOrFail($id);
@@ -31,14 +30,12 @@ class CategoryController extends Controller
         $status = $category->is_active ? 'Activated' : 'Deactivated';
         return back()->with('success', "Category has been {$status}.");
     }
-    // Edit Function: Show the edit form
     public function edit($id)
     {
         $category = \App\Models\Category::findOrFail($id);
         return view('admin.categories.edit', compact('category'));
     }
 
-    // Update Function: Save the edited data
     public function update(\Illuminate\Http\Request $request, $id)
     {
         $category = \App\Models\Category::findOrFail($id);
@@ -55,13 +52,11 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully!');
     }
-    // Create Function: Show the add new category form
     public function create()
     {
         return view('admin.categories.create');
     }
 
-    // Store Function: Save the new category into the database
     public function store(\Illuminate\Http\Request $request)
     {
         $request->validate([

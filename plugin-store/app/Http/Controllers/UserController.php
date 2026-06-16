@@ -10,7 +10,6 @@ class UserController extends Controller
 {
     public function dashboard()
     {
-        // Sirf logged-in user ke orders fetch karein
         $orders = Order::where('user_id', Auth::id())->latest()->get();
         
         return view('frontend.user.dashboard', compact('orders'));

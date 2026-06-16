@@ -12,7 +12,6 @@ use Stripe\Checkout\Session as StripeSession;
 
 class CheckoutController extends Controller
 {
-    // Show Checkout Form
     public function index()
     {
         $cart = session()->get('cart', []);
@@ -26,7 +25,6 @@ class CheckoutController extends Controller
             $subtotal += $item['price'] * $item['quantity'];
         }
 
-        // Apply Discount if coupon exists in session
         $discount = 0;
         if (session()->has('coupon')) {
             $coupon = session('coupon');
@@ -42,7 +40,6 @@ class CheckoutController extends Controller
         return view('frontend.checkout', compact('cart', 'subtotal', 'discount', 'total'));
     }
 
-    // Process the Order
    public function process(Request $request)
     {
         $request->validate([
@@ -51,7 +48,7 @@ class CheckoutController extends Controller
             'phone' => 'required|string|max:20',
             'shipping_address' => 'required|string',
             'city' => 'required|string',
-            'payment_method' => 'required|in:cod,stripe' // Jazzcash/Easypaisa ki jagah Stripe add kar dein
+            'payment_method' => 'required|in:cod,stripe'
         ]);
 
         $cart = session()->get('cart', []);
@@ -59,7 +56,7 @@ class CheckoutController extends Controller
             return redirect()->route('home');
         }
 
-        // Total Calculate Karein
+    
         $total = 0;
         foreach($cart as $item) {
             $total += $item['price'] * $item['quantity'];
@@ -70,31 +67,28 @@ class CheckoutController extends Controller
             $total -= $discount;
         }
 
-        // 1. COD LOGIC
+
         if ($request->payment_method === 'cod') {
             $this->saveOrder($request, $total, 'pending');
             session()->forget(['cart', 'coupon']);
             return redirect()->route('home')->with('success', 'Your COD Order has been placed successfully.');
         }
 
-        // 2. STRIPE PAYMENT LOGIC
         if ($request->payment_method === 'stripe') {
             Stripe::setApiKey(env('STRIPE_SECRET'));
 
-            // User ka data temporary session mein save karein taake payment ke baad order ban sake
             session()->put('checkout_details', $request->all());
             session()->put('checkout_total', $total);
 
-            // Stripe Checkout Session banayein
             $session = StripeSession::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => 'pkr', // Ya usd rakh lein
+                        'currency' => 'pkr',
                         'product_data' => [
                             'name' => 'PlugIn Store Order',
                         ],
-                        'unit_amount' => $total * 100, // Stripe cents mein amount leta hai isliye 100 se multiply kiya
+                        'unit_amount' => $total * 100, 
                     ],
                     'quantity' => 1,
                 ]],
@@ -103,12 +97,10 @@ class CheckoutController extends Controller
                 'cancel_url' => route('checkout.cancel'),
             ]);
 
-            // User ko Stripe ke payment page par redirect karein
             return redirect($session->url);
         }
     }
 
-    // Naya function: Order Database mein save karne ke liye
     private function saveOrder($request, $totalAmount, $paymentStatus)
     {
         $order = Order::create([
@@ -137,14 +129,12 @@ class CheckoutController extends Controller
         return $order;
     }
 
-    // Stripe Success Callback
     public function success()
     {
         if(session()->has('checkout_details')) {
             $details = session()->get('checkout_details');
             $total = session()->get('checkout_total');
             
-            // Payment successful, ab database mein "paid" status ke sath save karein
             $order = $this->saveOrder($details, $total, 'paid');
             
             session()->forget(['cart', 'coupon', 'checkout_details', 'checkout_total']);
@@ -153,7 +143,6 @@ class CheckoutController extends Controller
         return redirect()->route('home');
     }
 
-    // Stripe Cancel Callback
     public function cancel()
     {
         return redirect()->route('checkout.index')->with('error', 'Payment was cancelled. Please try again.');

@@ -12,7 +12,6 @@
         .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.3); }
         .product-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
-        /* Custom Scrollbar for dropdown */
         .search-results::-webkit-scrollbar { width: 6px; }
         .search-results::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
@@ -153,13 +152,11 @@
 
       <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // GSAP Animations
             gsap.from(".hero-badge", { y: 30, opacity: 0, duration: 0.8, delay: 0.1, ease: "back.out(1.7)" });
             gsap.from(".hero-title", { y: 40, opacity: 0, duration: 1, delay: 0.3, ease: "power4.out" });
             gsap.from(".hero-desc", { y: 20, opacity: 0, duration: 0.8, delay: 0.5, ease: "power3.out" });
             gsap.from(".hero-search", { y: 30, opacity: 0, duration: 0.8, delay: 0.7, ease: "power3.out" });
 
-            // Sticky Search Bar Scroll Logic
             const navLinks = document.getElementById('nav-links');
             const stickySearch = document.getElementById('sticky-search');
 
@@ -174,14 +171,9 @@
                     stickySearch.classList.remove('opacity-100', 'pointer-events-auto');
                 }
             });
-
-            // -----------------------------------------------------
-            // LIVE AJAX SEARCH & TWO-WAY SYNC LOGIC
-            // -----------------------------------------------------
             const searchInputs = document.querySelectorAll('.live-search-input');
             const resultDivs = document.querySelectorAll('.search-results');
 
-            // 1. Sync text between both search bars
             searchInputs.forEach(input => {
                 input.addEventListener('input', function() {
                     let val = this.value;
@@ -191,12 +183,10 @@
                 });
             });
 
-            // 2. Fetch Results and show in both dropdowns
             searchInputs.forEach(input => {
                 input.addEventListener('keyup', function(e) {
                     let query = this.value;
 
-                    // Agar user Enter dabaye toh Shop page par le jao
                     if(e.key === 'Enter') {
                         window.location.href = `/shop?search=${query}`;
                         return;
@@ -227,14 +217,12 @@
                                 html = '<div class="p-6 text-sm text-gray-500 text-center font-medium">No products found</div>';
                             }
                             
-                            // Ek sath dono dropdowns update karo
                             resultDivs.forEach(div => {
                                 div.innerHTML = html;
                                 div.classList.remove('hidden');
                             });
                         }).catch(err => console.error("AJAX Error:", err));
                     } else {
-                        // Agar query empty hai toh dono dropdowns hide karo
                         resultDivs.forEach(div => {
                             div.innerHTML = '';
                             div.classList.add('hidden');
@@ -243,7 +231,6 @@
                 });
             });
 
-            // Close dropdown when clicking anywhere else
             document.addEventListener('click', (e) => {
                 if(!e.target.closest('.search-results') && !e.target.closest('.live-search-input')) {
                     resultDivs.forEach(el => el.classList.add('hidden'));

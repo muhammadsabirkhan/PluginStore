@@ -15,7 +15,6 @@ class AdminMiddleware
             return $next($request);
         }
 
-        // Agar user admin nahi hai, toh 403 Forbidden error return karein
         abort(403, 'Unauthorized Access. Only administrators can view this page.');
     }
 }

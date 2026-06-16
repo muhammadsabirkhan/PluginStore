@@ -8,14 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
-    // Show Wishlist Page
     public function index()
     {
         $wishlists = Wishlist::with('product')->where('user_id', Auth::id())->latest()->get();
         return view('frontend.user.wishlist', compact('wishlists'));
     }
 
-    // Add or Remove from Wishlist (Toggle)
     public function toggle($productId)
     {
         $wishlist = Wishlist::where('user_id', Auth::id())->where('product_id', $productId)->first();
